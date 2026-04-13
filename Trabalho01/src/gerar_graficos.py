@@ -136,29 +136,24 @@ def criar_grafico_por_algoritmo(resultados, algoritmo):
 
 
 def criar_grafico_comparativo(resultados):
-    figura, eixos = plt.subplots(1, len(TIPOS_CASO), figsize=(18, 5), sharey=True)
+    for tipo_caso in TIPOS_CASO:
+        figura, eixo = plt.subplots(figsize=(10, 6))
 
-    if len(TIPOS_CASO) == 1:
-        eixos = [eixos]
-
-    for eixo, tipo_caso in zip(eixos, TIPOS_CASO):
         for nome_algoritmo in ALGORITMOS:
             tamanhos, tempos = preparar_dados_para_grafico(resultados, nome_algoritmo, tipo_caso)
             eixo.plot(tamanhos, tempos, marker="o", linewidth=2, label=nome_algoritmo.capitalize())
 
-        eixo.set_title(tipo_caso.capitalize())
+        eixo.set_title(f"Comparacao entre Mergesort e TimSort - {tipo_caso.capitalize()}")
         eixo.set_xlabel("Quantidade de elementos")
+        eixo.set_ylabel("Tempo de ordenacao (segundos)")
         eixo.grid(True, alpha=0.3)
+        eixo.legend()
+        figura.tight_layout()
 
-    eixos[0].set_ylabel("Tempo de ordenacao (segundos)")
-    eixos[-1].legend()
-    figura.suptitle("Comparacao entre Mergesort e TimSort")
-    figura.tight_layout(rect=[0, 0, 1, 0.95])
-
-    destino = GRAPHICS_DIR / "comparativo" / "comparacao_algoritmos.png"
-    destino.parent.mkdir(parents=True, exist_ok=True)
-    figura.savefig(destino, dpi=150)
-    plt.close(figura)
+        destino = GRAPHICS_DIR / "comparativo" / f"comparacao_{tipo_caso}.png"
+        destino.parent.mkdir(parents=True, exist_ok=True)
+        figura.savefig(destino, dpi=150)
+        plt.close(figura)
 
 
 def gerar_graficos(resultados):

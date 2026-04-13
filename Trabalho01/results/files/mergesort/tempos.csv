@@ -1,0 +1,10 @@
+algoritmo,tipo_caso,tamanho,tempo_segundos
+mergesort,crescente,20000,0.04995529999723658
+mergesort,decrescente,20000,0.05148840002948418
+mergesort,aleatorio,20000,0.08334240003023297
+mergesort,crescente,40000,0.11232219997327775
+mergesort,decrescente,40000,0.12036629999056458
+mergesort,aleatorio,40000,0.18665220000548288
+mergesort,crescente,60000,0.15288349997717887
+mergesort,decrescente,60000,0.15700460004154593
+mergesort,aleatorio,60000,0.268784899963066

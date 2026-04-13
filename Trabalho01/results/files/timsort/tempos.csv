@@ -1,0 +1,10 @@
+algoritmo,tipo_caso,tamanho,tempo_segundos
+timsort,crescente,20000,0.03767280001193285
+timsort,decrescente,20000,0.08949689997825772
+timsort,aleatorio,20000,0.07959540002048016
+timsort,crescente,40000,0.08677490003174171
+timsort,decrescente,40000,0.18863310001324862
+timsort,aleatorio,40000,0.17333889997098595
+timsort,crescente,60000,0.122090200020466
+timsort,decrescente,60000,0.3808716000057757
+timsort,aleatorio,60000,0.32726629998069257

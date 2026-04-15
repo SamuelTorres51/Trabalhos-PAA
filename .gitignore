@@ -1,2 +1,27 @@
-.vscode
-.venv
+# Editor
+.vscode/
+
+# Python
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*.pyo
+.Python
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+
+# C / C++
+*.o
+*.out
+*.exe
+a.out
+a.exe
+
+# OS
+.DS_Store
+Thumbs.db

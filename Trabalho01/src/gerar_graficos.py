@@ -15,7 +15,8 @@ RESULTS_DIR = BASE_DIR / "results"
 FILES_DIR = RESULTS_DIR / "files"
 GRAPHICS_DIR = RESULTS_DIR / "graphics"
 SEMENTE_BASE = 42
-TAMANHOS_PADRAO = (20000, 40000, 60000)
+TAMANHOS_PADRAO = (100000, 500000, 1000000)
+N_EXECUCOES = 30
 ALGORITMOS = {
     "mergesort": None,
     "timsort": None,
@@ -65,14 +66,18 @@ def executar_benchmark(tamanhos=TAMANHOS_PADRAO):
         for nome_algoritmo, funcao_ordenacao in ALGORITMOS.items():
             for tipo_caso in TIPOS_CASO:
                 vetor_base = casos[tipo_caso]
-                tempo = contar_tempo(funcao_ordenacao, vetor_base[:])
+                tempos = [
+                    contar_tempo(funcao_ordenacao, vetor_base[:])
+                    for _ in range(N_EXECUCOES)
+                ]
+                tempo_medio = sum(tempos) / N_EXECUCOES
 
                 resultados.append(
                     {
                         "algoritmo": nome_algoritmo,
                         "tipo_caso": tipo_caso,
                         "tamanho": tamanho,
-                        "tempo_segundos": tempo,
+                        "tempo_segundos": tempo_medio,
                     }
                 )
 
@@ -163,6 +168,7 @@ def gerar_graficos(resultados):
 
 
 def main():
+    print('Iniciando...')
     resultados = executar_benchmark()
     salvar_resultados_por_algoritmo(resultados)
     gerar_graficos(resultados)

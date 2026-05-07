@@ -15,7 +15,7 @@ RESULTS_DIR = BASE_DIR / "results"
 FILES_DIR = RESULTS_DIR / "files"
 GRAPHICS_DIR = RESULTS_DIR / "graphics"
 SEMENTE_BASE = 42
-TAMANHOS_PADRAO = (100000, 500000, 1000000)
+TAMANHOS_PADRAO = (100, 500, 1000)
 N_EXECUCOES = 30
 ALGORITMOS = {
     "mergesort": None,
@@ -42,7 +42,7 @@ def contar_tempo(funcao_ordenacao, vetor):
     inicio = perf_counter()
     funcao_ordenacao(vetor)
     fim = perf_counter()
-    return fim - inicio
+    return (fim - inicio) * 1000 # Em ms
 
 
 def gerar_casos(tamanho, semente):

@@ -5,6 +5,7 @@ import random
 import time
 import tracemalloc
 from pathlib import Path
+from statistics import mean
 
 from CaminhoRecursivo import caminho_minimo_recursivo
 from CaminhoDinamico import caminho_minimo_dinamico
@@ -17,6 +18,8 @@ SCENARIOS = [
     ("Cenario A", 8),
     ("Cenario B", 13),
 ]
+
+NUM_EXECUCOES = 10
 
 
 # =========================================================
@@ -49,6 +52,23 @@ def medir_desempenho(funcao, matriz):
     tempo_execucao = fim - inicio
 
     return tempo_execucao, pico_memoria, resultado
+
+
+# =========================================================
+# MEDE MÚLTIPLAS EXECUÇÕES E CALCULA MÉDIA
+# =========================================================
+def medir_media_desempenho(funcao, matriz, num_execucoes=NUM_EXECUCOES):
+
+    tempos = []
+    memorias = []
+    resultado = None
+
+    for _ in range(num_execucoes):
+        tempo_execucao, pico_memoria, resultado = medir_desempenho(funcao, matriz)
+        tempos.append(tempo_execucao)
+        memorias.append(pico_memoria)
+
+    return mean(tempos), mean(memorias), resultado
 
 
 # =========================================================
@@ -88,7 +108,7 @@ def executar_benchmark():
         # -------------------------------------------------
         # RECURSIVO
         # -------------------------------------------------
-        tempo_rec, memoria_rec, resultado_rec = medir_desempenho(
+        tempo_rec, memoria_rec, resultado_rec = medir_media_desempenho(
             caminho_minimo_recursivo,
             matriz
         )
@@ -96,6 +116,7 @@ def executar_benchmark():
         resultados_recursivo.append([
             cenario,
             tamanho,
+            NUM_EXECUCOES,
             tempo_rec,
             memoria_rec,
             resultado_rec
@@ -104,6 +125,7 @@ def executar_benchmark():
         tabela_comparativa.append([
             cenario,
             tamanho,
+            NUM_EXECUCOES,
             "Recursivo",
             tempo_rec,
             memoria_rec,
@@ -115,7 +137,7 @@ def executar_benchmark():
         # -------------------------------------------------
         # DINÂMICO
         # -------------------------------------------------
-        tempo_din, memoria_din, resultado_din = medir_desempenho(
+        tempo_din, memoria_din, resultado_din = medir_media_desempenho(
             caminho_minimo_dinamico,
             matriz
         )
@@ -123,6 +145,7 @@ def executar_benchmark():
         resultados_dinamico.append([
             cenario,
             tamanho,
+            NUM_EXECUCOES,
             tempo_din,
             memoria_din,
             resultado_din
@@ -131,6 +154,7 @@ def executar_benchmark():
         tabela_comparativa.append([
             cenario,
             tamanho,
+            NUM_EXECUCOES,
             "Programação Dinâmica",
             tempo_din,
             memoria_din,
@@ -146,6 +170,7 @@ def executar_benchmark():
     cabecalho = [
         "Cenario",
         "TamanhoMatriz",
+        "Execucoes",
         "TempoExecucao",
         "MemoriaBytes",
         "Resultado"
@@ -169,6 +194,7 @@ def executar_benchmark():
         [
             "Cenario",
             "TamanhoMatriz",
+            "Execucoes",
             "Versao",
             "TempoExecucao",
             "MemoriaBytes",

@@ -2,8 +2,8 @@
 
 import csv
 import random
+import sys
 import time
-import tracemalloc
 from pathlib import Path
 
 from CaminhoRecursivo import caminho_minimo_recursivo
@@ -18,7 +18,9 @@ SCENARIOS = [
     ("Cenario B", 13),
 ]
 
-NUM_EXECUCOES = 10
+NUM_EXECUCOES = 30
+TAMANHO_FRAME_ESTIMADO = sys.getsizeof(sys._getframe())
+TAMANHO_INTEIRO_ESTIMADO = sys.getsizeof(0)
 
 
 # =========================================================
@@ -35,22 +37,15 @@ def gerar_matriz(tamanho, rng, valor_min=1, valor_max=9):
 # MEDE TEMPO E MEMÓRIA
 # =========================================================
 def medir_desempenho(funcao, matriz):
-
-    tracemalloc.start()
-
     inicio = time.perf_counter()
 
     resultado = funcao(matriz)
 
     fim = time.perf_counter()
 
-    memoria_atual, pico_memoria = tracemalloc.get_traced_memory()
-
-    tracemalloc.stop()
-
     tempo_execucao = fim - inicio
 
-    return tempo_execucao, pico_memoria, resultado
+    return tempo_execucao, resultado
 
 
 # =========================================================
@@ -59,15 +54,33 @@ def medir_desempenho(funcao, matriz):
 def medir_media_desempenho(funcao, matriz, num_execucoes=NUM_EXECUCOES):
 
     tempos = []
-    memorias = []
     resultado = None
 
     for _ in range(num_execucoes):
-        tempo_execucao, pico_memoria, resultado = medir_desempenho(funcao, matriz)
+        tempo_execucao, resultado = medir_desempenho(funcao, matriz)
         tempos.append(tempo_execucao)
-        memorias.append(pico_memoria)
 
-    return sum(tempos) / len(tempos), sum(memorias) / len(memorias), resultado
+    return sum(tempos) / len(tempos), resultado
+
+
+# =========================================================
+# ESTIMATIVAS DE MEMÓRIA
+# =========================================================
+def estimar_memoria_recursiva(tamanho):
+
+    profundidade_maxima = (2 * tamanho) - 1
+
+    return profundidade_maxima * TAMANHO_FRAME_ESTIMADO
+
+
+def estimar_memoria_dinamica(tamanho):
+
+    memoria_estrutura = sys.getsizeof([None] * tamanho)
+    memoria_estrutura += tamanho * sys.getsizeof([None] * tamanho)
+
+    memoria_dados = tamanho * tamanho * TAMANHO_INTEIRO_ESTIMADO
+
+    return memoria_estrutura + memoria_dados
 
 
 # =========================================================
@@ -107,10 +120,12 @@ def executar_benchmark():
         # -------------------------------------------------
         # RECURSIVO
         # -------------------------------------------------
-        tempo_rec, memoria_rec, resultado_rec = medir_media_desempenho(
+        tempo_rec, resultado_rec = medir_media_desempenho(
             caminho_minimo_recursivo,
             matriz
         )
+
+        memoria_rec = estimar_memoria_recursiva(tamanho)
 
         resultados_recursivo.append([
             cenario,
@@ -136,10 +151,12 @@ def executar_benchmark():
         # -------------------------------------------------
         # DINÂMICO
         # -------------------------------------------------
-        tempo_din, memoria_din, resultado_din = medir_media_desempenho(
+        tempo_din, resultado_din = medir_media_desempenho(
             caminho_minimo_dinamico,
             matriz
         )
+
+        memoria_din = estimar_memoria_dinamica(tamanho)
 
         resultados_dinamico.append([
             cenario,
@@ -171,7 +188,7 @@ def executar_benchmark():
         "TamanhoMatriz",
         "Execucoes",
         "TempoExecucao",
-        "MemoriaBytes",
+        "MemoriaEstimativaBytes",
         "Resultado"
     ]
 
@@ -196,7 +213,7 @@ def executar_benchmark():
             "Execucoes",
             "Versao",
             "TempoExecucao",
-            "MemoriaBytes",
+            "MemoriaEstimativaBytes",
             "Resultado"
         ]
     )

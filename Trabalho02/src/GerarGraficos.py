@@ -43,7 +43,7 @@ def gerar_grafico_por_cenario(nome_cenario, dados_cenario):
     )
     versoes = dados_ordenados["Versao"].tolist()
     tempos = dados_ordenados["TempoExecucao"].tolist()
-    memorias = dados_ordenados["MemoriaBytes"].tolist()
+    memorias = dados_ordenados["MemoriaEstimativaBytes"].tolist()
 
     figura, eixos = plt.subplots(1, 2, figsize=(12, 5))
     figura.suptitle(f"Desempenho por Cenário: {nome_cenario}")
@@ -75,7 +75,7 @@ def gerar_grafico_metricas_por_cenario(nome_cenario, dados_cenario):
     )
     versoes = dados_ordenados["Versao"].tolist()
     tempos = dados_ordenados["TempoExecucao"].tolist()
-    memorias = dados_ordenados["MemoriaBytes"].tolist()
+    memorias = dados_ordenados["MemoriaEstimativaBytes"].tolist()
 
     for titulo, valores, arquivo_saida, rotulo_y, cores in [
         (
@@ -89,7 +89,7 @@ def gerar_grafico_metricas_por_cenario(nome_cenario, dados_cenario):
             "Memória Consumida",
             memorias,
             f"{gerar_slug(nome_cenario)}_memoria_consumida.png",
-            "Bytes",
+            "Bytes (estimativa)",
             ["#5B8E7D", "#D96C75"],
         ),
     ]:

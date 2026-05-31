@@ -1,5 +1,5 @@
 Cenario,TamanhoMatriz,Execucoes,Versao,TempoExecucao,MemoriaBytes,Resultado
-Cenario A,8,10,Recursivo,0.003679920034483075,0,29
-Cenario A,8,10,Programação Dinâmica,7.452000863850117e-05,688,29
-Cenario B,13,10,Recursivo,3.1689208899857477,0,74
-Cenario B,13,10,Programação Dinâmica,8.108005858957768e-05,1904,74
+Cenario A,8,10,Recursivo,0.0038082600571215154,0,29
+Cenario A,8,10,Programação Dinâmica,4.287995398044586e-05,688,29
+Cenario B,13,10,Recursivo,3.2057044899789617,0,74
+Cenario B,13,10,Programação Dinâmica,0.00019957993645220996,1904,74

@@ -1,0 +1,3 @@
+Cenario,TamanhoMatriz,TempoExecucao,MemoriaBytes,Resultado
+Cenario A,8,0.003882999997586012,72,29
+Cenario B,13,3.0229940998833627,168,74

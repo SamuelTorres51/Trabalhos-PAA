@@ -1,21 +1,30 @@
 # benchmark.py
 
+import csv
+import random
 import time
 import tracemalloc
-import random
-import csv
-import os
+from pathlib import Path
 
 from CaminhoRecursivo import caminho_minimo_recursivo
 from CaminhoDinamico import caminho_minimo_dinamico
 
 
+BASE_DIR = Path(__file__).resolve().parent
+RESULTS_DIR = BASE_DIR.parent / "results"
+
+SCENARIOS = [
+    ("Cenario A", 8),
+    ("Cenario B", 13),
+]
+
+
 # =========================================================
 # GERA MATRIZ ALEATÓRIA
 # =========================================================
-def gerar_matriz(tamanho, valor_min=1, valor_max=9):
+def gerar_matriz(tamanho, rng, valor_min=1, valor_max=9):
     return [
-        [random.randint(valor_min, valor_max) for _ in range(tamanho)]
+        [rng.randint(valor_min, valor_max) for _ in range(tamanho)]
         for _ in range(tamanho)
     ]
 
@@ -45,20 +54,15 @@ def medir_desempenho(funcao, matriz):
 # =========================================================
 # SALVA RESULTADOS EM CSV
 # =========================================================
-def salvar_csv(caminho_arquivo, dados):
+def salvar_csv(caminho_arquivo, dados, cabecalho):
 
-    os.makedirs(os.path.dirname(caminho_arquivo), exist_ok=True)
+    caminho_arquivo.parent.mkdir(parents=True, exist_ok=True)
 
     with open(caminho_arquivo, mode='w', newline='', encoding='utf-8') as arquivo:
 
         writer = csv.writer(arquivo)
 
-        writer.writerow([
-            "TamanhoMatriz",
-            "TempoExecucao",
-            "MemoriaBytes",
-            "Resultado"
-        ])
+        writer.writerow(cabecalho)
 
         writer.writerows(dados)
 
@@ -68,19 +72,18 @@ def salvar_csv(caminho_arquivo, dados):
 # =========================================================
 def executar_benchmark():
 
-    # Cenários de teste
-    tamanhos = [5, 7, 9, 11, 13]
-
     resultados_recursivo = []
     resultados_dinamico = []
+    tabela_comparativa = []
 
     print("\n========== INICIANDO BENCHMARK ==========\n")
 
-    for tamanho in tamanhos:
+    for indice, (cenario, tamanho) in enumerate(SCENARIOS, start=1):
 
-        print(f"Executando testes para matriz {tamanho}x{tamanho}")
+        print(f"Executando testes para {cenario} ({tamanho}x{tamanho})")
 
-        matriz = gerar_matriz(tamanho)
+        rng = random.Random(1000 + indice)
+        matriz = gerar_matriz(tamanho, rng)
 
         # -------------------------------------------------
         # RECURSIVO
@@ -91,7 +94,17 @@ def executar_benchmark():
         )
 
         resultados_recursivo.append([
+            cenario,
             tamanho,
+            tempo_rec,
+            memoria_rec,
+            resultado_rec
+        ])
+
+        tabela_comparativa.append([
+            cenario,
+            tamanho,
+            "Recursivo",
             tempo_rec,
             memoria_rec,
             resultado_rec
@@ -108,7 +121,17 @@ def executar_benchmark():
         )
 
         resultados_dinamico.append([
+            cenario,
             tamanho,
+            tempo_din,
+            memoria_din,
+            resultado_din
+        ])
+
+        tabela_comparativa.append([
+            cenario,
+            tamanho,
+            "Programação Dinâmica",
             tempo_din,
             memoria_din,
             resultado_din
@@ -120,14 +143,37 @@ def executar_benchmark():
     # SALVANDO CSVs
     # =====================================================
 
+    cabecalho = [
+        "Cenario",
+        "TamanhoMatriz",
+        "TempoExecucao",
+        "MemoriaBytes",
+        "Resultado"
+    ]
+
     salvar_csv(
-        "../results/CaminhoMinimoRecursivo/resultados.csv",
-        resultados_recursivo
+        RESULTS_DIR / "CaminhoMinimoRecursivo" / "resultados.csv",
+        resultados_recursivo,
+        cabecalho
     )
 
     salvar_csv(
-        "../results/CaminhoMinimoDinamico/resultados.csv",
-        resultados_dinamico
+        RESULTS_DIR / "CaminhoMinimoDinamico" / "resultados.csv",
+        resultados_dinamico,
+        cabecalho
+    )
+
+    salvar_csv(
+        RESULTS_DIR / "comparativo_geral.csv",
+        tabela_comparativa,
+        [
+            "Cenario",
+            "TamanhoMatriz",
+            "Versao",
+            "TempoExecucao",
+            "MemoriaBytes",
+            "Resultado"
+        ]
     )
 
     print("========== BENCHMARK FINALIZADO ==========")

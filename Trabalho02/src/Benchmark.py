@@ -5,7 +5,6 @@ import random
 import time
 import tracemalloc
 from pathlib import Path
-from statistics import mean
 
 from CaminhoRecursivo import caminho_minimo_recursivo
 from CaminhoDinamico import caminho_minimo_dinamico
@@ -68,7 +67,7 @@ def medir_media_desempenho(funcao, matriz, num_execucoes=NUM_EXECUCOES):
         tempos.append(tempo_execucao)
         memorias.append(pico_memoria)
 
-    return mean(tempos), mean(memorias), resultado
+    return sum(tempos) / len(tempos), sum(memorias) / len(memorias), resultado
 
 
 # =========================================================

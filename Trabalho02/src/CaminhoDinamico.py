@@ -19,7 +19,23 @@ def caminho_minimo_dinamico(matriz):
         dp[i][j - 1]
       )
 
-  return dp[total_linhas - 1][total_colunas - 1]
+  i, j = total_linhas - 1, total_colunas - 1
+  caminho = [(i, j)]
+
+  while i > 0 or j > 0:
+    if i == 0:
+      j -= 1
+    elif j == 0:
+      i -= 1
+    elif dp[i - 1][j] < dp[i][j - 1]:
+      i -= 1
+    else:
+      j -= 1
+    caminho.append((i, j))
+
+  caminho.reverse()
+
+  return dp[total_linhas - 1][total_colunas - 1], caminho
 
 
 if __name__ == "__main__":
@@ -29,6 +45,7 @@ if __name__ == "__main__":
     [4, 2, 1]
   ]
 
-  resultado = caminho_minimo_dinamico(matriz)
+  custo, caminho = caminho_minimo_dinamico(matriz)
 
-  print("Menor caminho:", resultado)
+  print("Menor custo:", custo)
+  print("Caminho:", " -> ".join(str(p) for p in caminho))

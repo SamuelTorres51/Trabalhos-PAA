@@ -3,16 +3,18 @@ def caminho_minimo_recursivo(matriz, linha=0, coluna=0):
   total_colunas = len(matriz[0])
 
   if linha == total_linhas - 1 and coluna == total_colunas - 1:
-    return matriz[linha][coluna]
+    return matriz[linha][coluna], [(linha, coluna)]
 
   if linha >= total_linhas or coluna >= total_colunas:
-    return float('inf')
+    return float('inf'), []
 
-  baixo = caminho_minimo_recursivo(matriz, linha + 1, coluna)
+  custo_baixo, caminho_baixo = caminho_minimo_recursivo(matriz, linha + 1, coluna)
+  custo_direita, caminho_direita = caminho_minimo_recursivo(matriz, linha, coluna + 1)
 
-  direita = caminho_minimo_recursivo(matriz, linha, coluna + 1)
-
-  return matriz[linha][coluna] + min(baixo, direita)
+  if custo_baixo <= custo_direita:
+    return matriz[linha][coluna] + custo_baixo, [(linha, coluna)] + caminho_baixo
+  else:
+    return matriz[linha][coluna] + custo_direita, [(linha, coluna)] + caminho_direita
 
 
 if __name__ == "__main__":
@@ -22,6 +24,7 @@ if __name__ == "__main__":
     [4, 2, 1]
   ]
 
-  resultado = caminho_minimo_recursivo(matriz)
+  custo, caminho = caminho_minimo_recursivo(matriz)
 
-  print("Menor caminho:", resultado)
+  print("Menor custo:", custo)
+  print("Caminho:", " -> ".join(str(p) for p in caminho))

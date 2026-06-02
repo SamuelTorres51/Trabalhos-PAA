@@ -41,10 +41,10 @@ def medir_desempenho(funcao, matriz):
 
 
 def medir_media_desempenho(funcao, matriz, num_execucoes=NUM_EXECUCOES):
-  tempos = []
-  resultado = None
+  tempo_execucao, resultado = medir_desempenho(funcao, matriz)
+  tempos = [tempo_execucao]
 
-  for _ in range(num_execucoes):
+  for _ in range(num_execucoes - 1):
     tempo_execucao, resultado = medir_desempenho(funcao, matriz)
     tempos.append(tempo_execucao)
 
@@ -90,10 +90,7 @@ def executar_benchmark():
     rng = random.Random(1000 + indice)
     matriz = gerar_matriz(tamanho, rng)
 
-    tempo_rec, resultado_rec = medir_media_desempenho(
-      caminho_minimo_recursivo,
-      matriz
-    )
+    tempo_rec, (custo_rec, caminho_rec) = medir_media_desempenho(caminho_minimo_recursivo, matriz)
 
     memoria_rec = estimar_memoria_recursiva(tamanho)
 
@@ -103,7 +100,7 @@ def executar_benchmark():
       NUM_EXECUCOES,
       tempo_rec,
       memoria_rec,
-      resultado_rec
+      custo_rec
     ])
 
     tabela_comparativa.append([
@@ -113,15 +110,13 @@ def executar_benchmark():
       "Recursivo",
       tempo_rec,
       memoria_rec,
-      resultado_rec
+      custo_rec
     ])
 
     print("Recursivo finalizado")
+    print("Caminho:", " -> ".join(str(p) for p in caminho_rec))
 
-    tempo_din, resultado_din = medir_media_desempenho(
-      caminho_minimo_dinamico,
-      matriz
-    )
+    tempo_din, (custo_din, caminho_din) = medir_media_desempenho(caminho_minimo_dinamico, matriz)
 
     memoria_din = estimar_memoria_dinamica(tamanho)
 
@@ -131,7 +126,7 @@ def executar_benchmark():
       NUM_EXECUCOES,
       tempo_din,
       memoria_din,
-      resultado_din
+      custo_din
     ])
 
     tabela_comparativa.append([
@@ -141,10 +136,11 @@ def executar_benchmark():
       "Programação Dinâmica",
       tempo_din,
       memoria_din,
-      resultado_din
+      custo_din
     ])
 
-    print("Dinâmico finalizado\n")
+    print("Dinâmico finalizado")
+    print("Caminho:", " -> ".join(str(p) for p in caminho_din), "\n")
 
   cabecalho = [
     "Cenario",

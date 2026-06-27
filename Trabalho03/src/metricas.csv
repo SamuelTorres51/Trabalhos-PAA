@@ -1,0 +1,9 @@
+caso,dimensao,algoritmo,resultado_obtido,melhor_solucao_encontrada,tempo_execucao_ms,numero_de_decisoes,memoria_pico_bytes
+Caso 1 - Labirinto 6x6,6x6,Guloso,Caminho com 12 passos,Nao (2 passos a mais),0.0175,12,3164
+Caso 1 - Labirinto 6x6,6x6,Backtracking,Caminho com 10 passos,Sim (otimo),0.1867,244,10280
+Caso 2 - Labirinto 8x8,8x8,Guloso,Sem solucao,Nao encontrou,0.0025,2,748
+Caso 2 - Labirinto 8x8,8x8,Backtracking,Caminho com 14 passos,Sim (otimo),4.1252,4971,5268
+Caso 3 - Labirinto 10x10,10x10,Guloso,Sem solucao,Nao encontrou,0.0121,9,1428
+Caso 3 - Labirinto 10x10,10x10,Backtracking,Caminho com 18 passos,Sim (otimo),5.6292,7042,8572
+Caso 4 - Labirinto 12x12,12x12,Guloso,Caminho com 24 passos,Nao (2 passos a mais),0.0363,24,3096
+Caso 4 - Labirinto 12x12,12x12,Backtracking,Caminho com 22 passos,Sim (otimo),72.2449,87128,6364

@@ -28,12 +28,6 @@ def _tem_caminho(labirinto):
 
 
 def gerar_labirinto(tamanho, semente, densidade_paredes=0.28):
-  """Gera um labirinto quadrado (tamanho x tamanho) com solucao garantida.
-
-  Usa uma semente fixa para que o mesmo labirinto seja reproduzido a cada
-  execucao (util para a demonstracao em aula). Sorteia paredes ate obter um
-  labirinto em que exista caminho do inicio (0, 0) ao fim (tamanho-1, tamanho-1).
-  """
   rng = random.Random(semente)
 
   while True:
